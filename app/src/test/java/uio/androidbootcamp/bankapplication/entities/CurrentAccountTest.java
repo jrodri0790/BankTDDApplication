@@ -1,21 +1,39 @@
 package uio.androidbootcamp.bankapplication.entities;
 
+import org.junit.Before;
 import org.junit.Test;
 import uio.androidbootcamp.bankapplication.exceptions.NegativeValuesException;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class CurrentAccountTest {
 
+    private CurrentAccount currentAccount;
+
+    @Before
+    public void init(){
+        currentAccount = new CurrentAccount();
+    }
+
+
+    @Test
+    public void testShouldSetDiscountPercentageWhenCurrentAccountIsCreated(){
+        double discountPercentage = 0.01;
+
+        assertThat(discountPercentage,is(this.currentAccount.getDiscountPercentage()));
+    }
 
     @Test(expected = NegativeValuesException.class)
     public void testShouldThrowExceptionWhenReceiveNegativeValuesForDeposit() throws NegativeValuesException {
         double depositQuantity = -3;
-        CurrentAccount currentAccount = new CurrentAccount();
 
-        currentAccount.deposit(depositQuantity);
+
+        this.currentAccount.deposit(depositQuantity);
     }
 
 
@@ -23,11 +41,12 @@ public class CurrentAccountTest {
     @Test
     public void testShouldDepositWhenReceivePositiveValues() throws NegativeValuesException {
         double depositQunaity = 3;
-        CurrentAccount currentAccount = new CurrentAccount();
 
-        currentAccount.deposit(depositQunaity);
+        double onePercentageDiscount = depositQunaity/100;
 
-        assertThat(depositQunaity, is(currentAccount.getBalance()));
+        this.currentAccount.deposit(depositQunaity);
+
+        assertThat(depositQunaity-onePercentageDiscount, is(this.currentAccount.getBalance()));
     }
 
 
@@ -35,19 +54,19 @@ public class CurrentAccountTest {
     @Test(expected = NegativeValuesException.class)
     public void testShouldThrowExceptionWhenReceiveNegativeValuesForWithdraw() throws NegativeValuesException, ValueUpperBalanceException {
         double withdrawQuantity = -3;
-        CurrentAccount currentAccount = new CurrentAccount();
 
-        currentAccount.withdraw(withdrawQuantity);
+
+        this.currentAccount.withdraw(withdrawQuantity);
     }
 
 
     @Test(expected = ValueUpperBalanceException.class)
     public void testShouldThrowExceptionWhenPositiveValueForWithdrawIsUpperBalance() throws NegativeValuesException, ValueUpperBalanceException {
         double withdrawQuantity = 3;
-        CurrentAccount currentAccount = new CurrentAccount();
-        currentAccount.deposit(withdrawQuantity-2);
 
-        currentAccount.withdraw(withdrawQuantity);
+        this.currentAccount.deposit(withdrawQuantity-2);
+
+        this.currentAccount.withdraw(withdrawQuantity);
     }
 
 
@@ -55,38 +74,40 @@ public class CurrentAccountTest {
     public void testShouldWithdrawWhenReceivePositiveValuesLowerThanBalance() throws NegativeValuesException, ValueUpperBalanceException {
         double withdrawQuantity = 3;
         double depositQuantity = withdrawQuantity+2;
-        CurrentAccount currentAccount = new CurrentAccount();
-        currentAccount.deposit(depositQuantity);
 
-        currentAccount.withdraw(withdrawQuantity);
+        double onePercentageDiscount = new BigDecimal(depositQuantity).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP).doubleValue();
+        this.currentAccount.deposit(depositQuantity);
 
-        assertThat(depositQuantity - withdrawQuantity, is(currentAccount.getBalance()));
+        this.currentAccount.withdraw(withdrawQuantity);
+
+        assertThat(depositQuantity - withdrawQuantity-onePercentageDiscount, is(this.currentAccount.getBalance()));
     }
 
 
     @Test
     public void testShouldWithdrawWhenReceivePositiveValuesEqualsBalance() throws NegativeValuesException, ValueUpperBalanceException {
         double withdrawQuantity = 3;
-        CurrentAccount currentAccount = new CurrentAccount();
-        currentAccount.deposit(withdrawQuantity);
+
+        this.currentAccount.deposit(withdrawQuantity);
         double balanceZero = 0;
 
-        currentAccount.withdraw(withdrawQuantity-withdrawQuantity/100);
+        this.currentAccount.withdraw(withdrawQuantity-withdrawQuantity/100);
 
-        assertThat(balanceZero, is(currentAccount.getBalance()));
+        assertThat(balanceZero, is(this.currentAccount.getBalance()));
     }
 
 
     @Test
     public void testShouldDiscountNPercentageWhenCallDeposit() throws NegativeValuesException  {
         double depositQuantity = 3;
-        CurrentAccount currentAccount = new CurrentAccount();
+
         double onePercentageDiscount = depositQuantity/100;
 
-        currentAccount.deposit(depositQuantity);
+        this.currentAccount.deposit(depositQuantity);
 
-        assertThat(depositQuantity-onePercentageDiscount, is(currentAccount.getBalance()));
+        assertThat(depositQuantity-onePercentageDiscount, is(this.currentAccount.getBalance()));
     }
+
 
 
 
