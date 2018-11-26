@@ -3,6 +3,7 @@ package uio.androidbootcamp.bankapplication.entities;
 import org.junit.Before;
 import org.junit.Test;
 import uio.androidbootcamp.bankapplication.exceptions.NegativeValuesException;
+import uio.androidbootcamp.bankapplication.exceptions.ValueUpper2000Exception;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
 
 import java.math.BigDecimal;
@@ -52,7 +53,7 @@ public class CurrentAccountTest {
 
 
     @Test(expected = NegativeValuesException.class)
-    public void testShouldThrowExceptionWhenReceiveNegativeValuesForWithdraw() throws NegativeValuesException, ValueUpperBalanceException {
+    public void testShouldThrowExceptionWhenReceiveNegativeValuesForWithdraw() throws NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception {
         double withdrawQuantity = -3;
 
 
@@ -61,7 +62,7 @@ public class CurrentAccountTest {
 
 
     @Test(expected = ValueUpperBalanceException.class)
-    public void testShouldThrowExceptionWhenPositiveValueForWithdrawIsUpperBalance() throws NegativeValuesException, ValueUpperBalanceException {
+    public void testShouldThrowExceptionWhenPositiveValueForWithdrawIsUpperBalance() throws NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception {
         double withdrawQuantity = 3;
 
         this.currentAccount.deposit(withdrawQuantity-2);
@@ -71,7 +72,7 @@ public class CurrentAccountTest {
 
 
     @Test
-    public void testShouldWithdrawWhenReceivePositiveValuesLowerThanBalance() throws NegativeValuesException, ValueUpperBalanceException {
+    public void testShouldWithdrawWhenReceivePositiveValuesLowerThanBalance() throws NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception {
         double withdrawQuantity = 3;
         double depositQuantity = withdrawQuantity+2;
 
@@ -85,9 +86,8 @@ public class CurrentAccountTest {
 
 
     @Test
-    public void testShouldWithdrawWhenReceivePositiveValuesEqualsBalance() throws NegativeValuesException, ValueUpperBalanceException {
+    public void testShouldWithdrawWhenReceivePositiveValuesEqualsBalance() throws NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception {
         double withdrawQuantity = 3;
-
         this.currentAccount.deposit(withdrawQuantity);
         double balanceZero = 0;
 
@@ -108,6 +108,27 @@ public class CurrentAccountTest {
         assertThat(depositQuantity-onePercentageDiscount, is(this.currentAccount.getBalance()));
     }
 
+    @Test(expected = ValueUpper2000Exception.class)
+    public void testShouldExceptionWhenWithdrawQuantityIsUpper2000() throws NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception {
+        double withdrawQuantity = 2100.00;
+        currentAccount.deposit(withdrawQuantity+100);
+
+        currentAccount.withdraw(withdrawQuantity);
+    }
+
+    @Test
+    public void testShouldSetInterest000015WhenCreateCurrentAccount(){
+        double interest = 0.00015;
+
+        assertThat(interest, is(currentAccount.getInterest()));
+    }
+
+    @Test
+    public void testShouldStatusActiveWhenCreateCurrentAccount(){
+            String status = "Activa";
+
+            assertThat(status, is(currentAccount.getStatus()));
+    }
 
 
 
