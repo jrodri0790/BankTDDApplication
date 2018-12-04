@@ -34,4 +34,14 @@ public class ClientTest {
         assertThat(client.getId(),is(id));
     }
 
+    @Test
+    public void testShouldClientHasMoreOneAccount(){
+        Client client = new Client("","", "12");
+        AccountBank account = new AccountBank();
+
+        client.addOneAccount(account);
+
+        assertThat(1, is(client.listAccounsBank.size()));
+    }
+
 }
