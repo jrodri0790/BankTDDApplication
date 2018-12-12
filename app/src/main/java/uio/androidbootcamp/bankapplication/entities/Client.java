@@ -1,9 +1,10 @@
 package uio.androidbootcamp.bankapplication.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Client {
-    public List<AccountBank> listAccounsBank;
+    private List<AccountBank> accountsBank;
     private String name;
     private String lastName;
     private String id;
@@ -12,6 +13,7 @@ public class Client {
         this.name = name;
         this.lastName = lastName;
         this.id = id;
+        this.accountsBank = new ArrayList<>();
     }
 
     public String getName() {
@@ -27,6 +29,10 @@ public class Client {
     }
 
     public void addOneAccount(AccountBank account) {
-        this.listAccounsBank.add(account);
+        this.accountsBank.add(account);
+    }
+
+    public List<AccountBank> getAccountsBank() {
+        return this.accountsBank;
     }
 }

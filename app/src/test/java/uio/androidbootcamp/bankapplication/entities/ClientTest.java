@@ -1,7 +1,6 @@
 package uio.androidbootcamp.bankapplication.entities;
 
 import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
@@ -35,13 +34,23 @@ public class ClientTest {
     }
 
     @Test
-    public void testShouldClientHasMoreOneAccount(){
+    public void testShouldClientCouldAddCurrentAccounts(){
         Client client = new Client("","", "12");
-        AccountBank account = new AccountBank();
+        AccountBank account = new CurrentAccount();
 
         client.addOneAccount(account);
 
-        assertThat(1, is(client.listAccounsBank.size()));
+        assertThat(1, is(client.getAccountsBank().size()));
+    }
+
+    @Test
+    public void testShouldClientAddSavingAccounts(){
+        Client client = new Client("","","12");
+        AccountBank account = new SavingsAccount();
+
+        client.addOneAccount(account);
+
+        assertThat(1,is(client.getAccountsBank().size()));
     }
 
 }

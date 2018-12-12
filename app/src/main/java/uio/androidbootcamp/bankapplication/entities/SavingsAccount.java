@@ -4,11 +4,7 @@ import uio.androidbootcamp.bankapplication.exceptions.NegativeValuesException;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpper1000Exception;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
 
-class SavingsAccount {
-
-    private int balance;
-    private double interest;
-    private String status;
+class SavingsAccount extends AccountBank{
 
     public SavingsAccount(){
         this.interest = 0.0001;

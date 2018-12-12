@@ -8,12 +8,9 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-class CurrentAccount {
+class CurrentAccount extends AccountBank{
 
-    private final double interest;
-    private double balance;
     private double discountPercentage;
-    private String status;
 
     public CurrentAccount(){
         this.discountPercentage = 0.01;

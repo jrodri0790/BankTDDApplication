@@ -130,6 +130,11 @@ public class CurrentAccountTest {
             assertThat(status, is(currentAccount.getStatus()));
     }
 
+    @Test
+    public void testShouldCurrentAccountBeAccountBank(){
+        assertThat(true, is(currentAccount instanceof AccountBank));
+    }
+
 
 
 
