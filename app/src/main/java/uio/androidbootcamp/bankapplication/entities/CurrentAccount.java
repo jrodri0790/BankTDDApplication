@@ -8,14 +8,15 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-class CurrentAccount extends AccountBank{
+public class CurrentAccount extends AccountBank{
 
     private double discountPercentage;
 
-    public CurrentAccount(){
+    public CurrentAccount(String id){
         this.discountPercentage = 0.01;
         this.interest = 0.00015;
         this.status = "Activa";
+        this.id = id;
     }
 
     public void deposit(double depositQuantity) throws NegativeValuesException {
@@ -55,4 +56,5 @@ class CurrentAccount extends AccountBank{
     public double getInterest() {return interest;  }
 
     public String getStatus() { return this.status;  }
+
 }

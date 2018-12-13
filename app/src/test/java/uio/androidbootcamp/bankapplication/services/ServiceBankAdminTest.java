@@ -2,6 +2,7 @@ package uio.androidbootcamp.bankapplication.services;
 
 import org.junit.Before;
 import org.junit.Test;
+import uio.androidbootcamp.bankapplication.entities.*;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,36 +19,77 @@ public class ServiceBankAdminTest {
 
     @Test
     public void testShouldCreateClient(){
+        Client client  = serviceBankAdmin.createClient("", "", "");
 
-        serviceBankAdmin.createClient("", "", "");
-
-        assertThat(serviceBankAdmin.getClient(), not(nullValue()));
+        assertThat(client, not(nullValue()));
     }
 
     @Test
     public void testShouldCreateClientWithGivenName(){
         String givenName = "Jaime";
 
-        serviceBankAdmin.createClient(givenName, "", "");
+        Client client = serviceBankAdmin.createClient(givenName, "", "");
 
-        assertThat(serviceBankAdmin.getClient().getName(), is(givenName));
+        assertThat(client.getName(), is(givenName));
     }
 
     @Test
     public void testShouldCreateClientWithGivenLastName(){
         String lastName = "Borja";
 
-        serviceBankAdmin.createClient("",lastName, "");
+        Client client = serviceBankAdmin.createClient("",lastName, "");
 
-        assertThat(serviceBankAdmin.getClient().getLastName(), is(lastName));
+        assertThat(client.getLastName(), is(lastName));
     }
 
     @Test
     public void testShouldCreateClientWithGivenId(){
         String id = "12";
 
-        serviceBankAdmin.createClient("","", id);
+        Client cLient = serviceBankAdmin.createClient("","", id);
 
-        assertThat(serviceBankAdmin.getClient().getId(), is(id));
+        assertThat(cLient.getId(), is(id));
     }
+
+
+    @Test
+    public void testShouldCreateCurrentAccount(){
+        AccountBank currentAccount = serviceBankAdmin.createCurrentAccount("");
+
+        assertThat(currentAccount, not(nullValue()));
+    }
+
+    @Test
+    public void testShouldBeInstanceOfCurrentAccount(){
+        AccountBank currentAccount = serviceBankAdmin.createCurrentAccount("");
+
+        assertThat(true, is(currentAccount instanceof CurrentAccount));
+    }
+
+    @Test
+    public void testShouldBeInstanceOfSavingAccount(){
+        AccountBank savingsAccount = serviceBankAdmin.createSavingAccount("");
+
+        assertThat(true, is(savingsAccount instanceof SavingsAccount));
+    }
+
+    @Test
+    public void testShouldCreateCurrentAccountWithGivenId(){
+        String id = "3";
+
+        AccountBank currentAccount = serviceBankAdmin.createCurrentAccount(id);
+
+        assertThat(currentAccount.getId(), is(id));
+    }
+
+    @Test
+    public void testShouldCreateSavingAccountWithGivenId(){
+        String id = "4";
+
+        AccountBank savingsAccount = serviceBankAdmin.createSavingAccount(id);
+
+        assertThat(savingsAccount.getId(), is(id));
+    }
+
+
 }

@@ -36,7 +36,7 @@ public class ClientTest {
     @Test
     public void testShouldClientCouldAddCurrentAccounts(){
         Client client = new Client("","", "12");
-        AccountBank account = new CurrentAccount();
+        AccountBank account = new CurrentAccount("");
 
         client.addOneAccount(account);
 
@@ -46,7 +46,7 @@ public class ClientTest {
     @Test
     public void testShouldClientAddSavingAccounts(){
         Client client = new Client("","","12");
-        AccountBank account = new SavingsAccount();
+        AccountBank account = new SavingsAccount("");
 
         client.addOneAccount(account);
 

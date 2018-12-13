@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import uio.androidbootcamp.bankapplication.exceptions.NegativeValuesException;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpper1000Exception;
-import uio.androidbootcamp.bankapplication.exceptions.ValueUpper2000Exception;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -17,7 +16,7 @@ public class SavingsAccountTest {
 
     @Before
     public void init(){
-        savingsAccount = new SavingsAccount();
+        savingsAccount = new SavingsAccount("");
     }
 
     @Test(expected = NegativeValuesException.class)
@@ -90,6 +89,15 @@ public class SavingsAccountTest {
     @Test
     public void testSavingAccountBeAccountBank(){
         assertThat(true, is(savingsAccount instanceof AccountBank));
+    }
+
+    @Test
+    public void testShouldCreateSavingAccountWithGivenId(){
+        String id = "2";
+
+        SavingsAccount savingsAccount = new SavingsAccount(id);
+
+        assertThat(savingsAccount.getId(), is(id));
     }
 
 

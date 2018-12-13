@@ -18,7 +18,7 @@ public class CurrentAccountTest {
 
     @Before
     public void init(){
-        currentAccount = new CurrentAccount();
+        currentAccount = new CurrentAccount("");
     }
 
 
@@ -133,6 +133,15 @@ public class CurrentAccountTest {
     @Test
     public void testShouldCurrentAccountBeAccountBank(){
         assertThat(true, is(currentAccount instanceof AccountBank));
+    }
+
+    @Test
+    public void testShouldCreateAccountWithGivenId(){
+        String idAccount = "1";
+
+        CurrentAccount currentAccount = new CurrentAccount(idAccount);
+
+        assertThat(currentAccount.getId(), is(idAccount));
     }
 
 

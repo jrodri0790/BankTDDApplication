@@ -4,11 +4,12 @@ import uio.androidbootcamp.bankapplication.exceptions.NegativeValuesException;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpper1000Exception;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
 
-class SavingsAccount extends AccountBank{
+public class SavingsAccount extends AccountBank{
 
-    public SavingsAccount(){
+    public SavingsAccount(String id){
         this.interest = 0.0001;
         this.status = "Activa";
+        this.id = id;
     }
 
     public void deposit(double depositQuantity) throws NegativeValuesException {
@@ -48,4 +49,5 @@ class SavingsAccount extends AccountBank{
     public String getStatus() {
         return status;
     }
+
 }

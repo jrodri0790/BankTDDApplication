@@ -1,15 +1,23 @@
 package uio.androidbootcamp.bankapplication.services;
 
+import uio.androidbootcamp.bankapplication.entities.AccountBank;
 import uio.androidbootcamp.bankapplication.entities.Client;
+import uio.androidbootcamp.bankapplication.entities.CurrentAccount;
+import uio.androidbootcamp.bankapplication.entities.SavingsAccount;
 
 public class ServiceBankAdmin {
-    private Client client;
 
-    public void createClient(String name, String lastName, String id) {
-        client = new Client(name, lastName, id);
+    public Client createClient(String name, String lastName, String id) {
+        return new Client(name, lastName, id);
     }
 
-    public Client getClient() {
-        return client;
+
+    public AccountBank createCurrentAccount(String id) {
+        return new CurrentAccount(id);
     }
+
+    public AccountBank createSavingAccount(String id){
+        return new SavingsAccount(id);
+    }
+
 }
