@@ -20,4 +20,19 @@ public class ServiceBankAdmin {
         return new SavingsAccount(id);
     }
 
+    public Client addAccountToClient(Client client, AccountBank accountBank) {
+        Client clientClone = new Client(client.getName(), client.getLastName(), client.getId());
+        AccountBank accountBankClone = null;
+
+        if(accountBank instanceof CurrentAccount){
+            accountBankClone = new CurrentAccount(accountBank.getId());
+        }
+        else if(accountBank instanceof SavingsAccount){
+            accountBankClone = new SavingsAccount(accountBank.getId());
+        }
+
+        clientClone.addOneAccount(accountBankClone);
+
+        return clientClone;
+    }
 }

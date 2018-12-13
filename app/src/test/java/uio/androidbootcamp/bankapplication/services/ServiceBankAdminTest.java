@@ -91,5 +91,26 @@ public class ServiceBankAdminTest {
         assertThat(savingsAccount.getId(), is(id));
     }
 
+    @Test
+    public void testShouldAssociateClientWithCurrentAccount(){
+        Client client = new Client("Pepito", "Lara", "1");
+        AccountBank accountBank = new CurrentAccount("33");
+
+        Client clientResult= serviceBankAdmin.addAccountToClient(client, accountBank);
+
+        assertThat(clientResult.getAccountsBank().get(0).getId(), is(accountBank.getId()));
+
+    }
+
+    @Test
+    public void testShouldAssociateClientWithSavingAccount(){
+        Client client = new Client("Pepito", "Lara", "1");
+        AccountBank accountBank = new SavingsAccount("33");
+
+        Client clientResult= serviceBankAdmin.addAccountToClient(client, accountBank);
+
+        assertThat(clientResult.getAccountsBank().get(0).getId(), is(accountBank.getId()));
+    }
+
 
 }
