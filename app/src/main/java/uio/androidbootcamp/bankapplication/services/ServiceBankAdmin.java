@@ -59,4 +59,16 @@ public class ServiceBankAdmin {
         savingAccount.withdraw(withdrawQuantity);
         return savingAccount.getBalance();
     }
+
+    public double transferBetweenSavingAccounts(SavingsAccount accountBankTransmitter, SavingsAccount accountBankReceiver, double transferQuantity) throws ValueUpperBalanceException, NegativeValuesException, ValueUpper1000Exception {
+        accountBankTransmitter.withdraw(transferQuantity);
+        accountBankReceiver.deposit(transferQuantity);
+        return accountBankReceiver.getBalance();
+    }
+
+    public double transferBetweenCurrentAccounts(AccountBank accountBankTransmitter, AccountBank accountBankReceiver, double transferQuantity) throws ValueUpper2000Exception, ValueUpperBalanceException, NegativeValuesException {
+        ((CurrentAccount)accountBankTransmitter).withdraw(transferQuantity);
+        ((CurrentAccount)accountBankReceiver).deposit(transferQuantity);
+        return ((CurrentAccount)accountBankReceiver).getBalance();
+    }
 }
