@@ -4,6 +4,10 @@ import uio.androidbootcamp.bankapplication.entities.AccountBank;
 import uio.androidbootcamp.bankapplication.entities.Client;
 import uio.androidbootcamp.bankapplication.entities.CurrentAccount;
 import uio.androidbootcamp.bankapplication.entities.SavingsAccount;
+import uio.androidbootcamp.bankapplication.exceptions.NegativeValuesException;
+import uio.androidbootcamp.bankapplication.exceptions.ValueUpper1000Exception;
+import uio.androidbootcamp.bankapplication.exceptions.ValueUpper2000Exception;
+import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
 
 public class ServiceBankAdmin {
 
@@ -34,5 +38,25 @@ public class ServiceBankAdmin {
         clientClone.addOneAccount(accountBankClone);
 
         return clientClone;
+    }
+
+    public double depositToCurrentAccount(double depositQuantity, CurrentAccount currentAccount) throws NegativeValuesException {
+        currentAccount.deposit(depositQuantity);
+        return currentAccount.getBalance();
+    }
+
+    public double withdrawFromCurrentAccount(double withdrawQuantity, CurrentAccount currentAccount) throws ValueUpper2000Exception, ValueUpperBalanceException, NegativeValuesException {
+        currentAccount.withdraw(withdrawQuantity);
+        return currentAccount.getBalance();
+    }
+
+    public double depositToSavingAccount(double depositQuantity, SavingsAccount savingsAccount) throws NegativeValuesException {
+        savingsAccount.deposit(depositQuantity);
+        return savingsAccount.getBalance();
+    }
+
+    public double withdrawFromSavingAccount(double withdrawQuantity, SavingsAccount savingAccount) throws ValueUpperBalanceException, NegativeValuesException, ValueUpper1000Exception {
+        savingAccount.withdraw(withdrawQuantity);
+        return savingAccount.getBalance();
     }
 }

@@ -3,6 +3,10 @@ package uio.androidbootcamp.bankapplication.services;
 import org.junit.Before;
 import org.junit.Test;
 import uio.androidbootcamp.bankapplication.entities.*;
+import uio.androidbootcamp.bankapplication.exceptions.NegativeValuesException;
+import uio.androidbootcamp.bankapplication.exceptions.ValueUpper1000Exception;
+import uio.androidbootcamp.bankapplication.exceptions.ValueUpper2000Exception;
+import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -110,6 +114,54 @@ public class ServiceBankAdminTest {
         Client clientResult= serviceBankAdmin.addAccountToClient(client, accountBank);
 
         assertThat(clientResult.getAccountsBank().get(0).getId(), is(accountBank.getId()));
+    }
+
+
+    @Test
+    public void testShouldDepositToCurrentAccount() throws NegativeValuesException {
+        double depositQuantity = 120.00;
+        CurrentAccount currentAccount = new CurrentAccount("1");
+
+        double depositQuantityResult = serviceBankAdmin.depositToCurrentAccount(depositQuantity, currentAccount);
+
+        assertThat(depositQuantityResult, is(depositQuantity-depositQuantity*0.01));
+    }
+
+
+    @Test
+    public void testShouldWithdrawFromCurrentAccount() throws NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception {
+        double depositQuantity = 120.00;
+        double withdrawQuantity = 80.00;
+        CurrentAccount currentAccount = new CurrentAccount("1");
+        double currentBalanceQuantity  = serviceBankAdmin.depositToCurrentAccount(depositQuantity, currentAccount);
+
+        double withdrawQuantityResult = serviceBankAdmin.withdrawFromCurrentAccount(withdrawQuantity, currentAccount);
+
+        assertThat(withdrawQuantityResult,is(currentBalanceQuantity - withdrawQuantity));
+    }
+
+
+    @Test
+    public void testShouldDepositToSavingtAccount() throws NegativeValuesException {
+        double depositQuantity = 100.00;
+        SavingsAccount savingsAccount = new SavingsAccount("1");
+
+        double depositQuantityResult = serviceBankAdmin.depositToSavingAccount(depositQuantity, savingsAccount);
+
+        assertThat(depositQuantityResult, is(depositQuantity));
+    }
+
+
+    @Test
+    public void testShouldWithdrawFromSavingAccount() throws NegativeValuesException, ValueUpperBalanceException, ValueUpper1000Exception {
+        double depositQuantity = 120.00;
+        double withdrawQuantity = 80.00;
+        SavingsAccount savingAccount = new SavingsAccount("1");
+        double currentBalanceQuantity  = serviceBankAdmin.depositToSavingAccount(depositQuantity, savingAccount);
+
+        double withdrawQuantityResult = serviceBankAdmin.withdrawFromSavingAccount(withdrawQuantity, savingAccount);
+
+        assertThat(withdrawQuantityResult,is(currentBalanceQuantity - withdrawQuantity));
     }
 
 
