@@ -49,12 +49,14 @@ public class CurrentAccount extends AccountBank{
         return discountPercentage;
     }
 
-    public double getBalance() {
-        return balance;
-    }
-
     public double getInterest() {return interest;  }
 
     public String getStatus() { return this.status;  }
+
+    public CurrentAccount clone(){
+        CurrentAccount currentAccountClone = new CurrentAccount(this.id);
+        currentAccountClone.balance = this.balance;
+        return currentAccountClone;
+    }
 
 }

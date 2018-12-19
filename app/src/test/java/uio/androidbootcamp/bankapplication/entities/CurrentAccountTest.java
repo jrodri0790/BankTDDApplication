@@ -144,6 +144,19 @@ public class CurrentAccountTest {
         assertThat(currentAccount.getId(), is(idAccount));
     }
 
+    @Test
+    public void shouldCloneCurrentAccount() throws NegativeValuesException {
+        CurrentAccount accountBank = new CurrentAccount("2");
+        accountBank.deposit(100.00);
+
+        CurrentAccount resultObjet = accountBank.clone();
+
+        assertThat(resultObjet.getId(), is(accountBank.getId()));
+        assertThat(resultObjet.getDiscountPercentage(), is(accountBank.getDiscountPercentage()));
+        assertThat(resultObjet.getInterest(), is(accountBank.getInterest()));
+        assertThat(resultObjet.getStatus(), is(accountBank.getStatus()));
+        assertThat(resultObjet.getBalance(), is(accountBank.getBalance()));
+    }
 
 
 

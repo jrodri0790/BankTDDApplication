@@ -40,9 +40,10 @@ public class ServiceBankAdmin {
         return clientClone;
     }
 
-    public double depositToCurrentAccount(double depositQuantity, CurrentAccount currentAccount) throws NegativeValuesException {
-        currentAccount.deposit(depositQuantity);
-        return currentAccount.getBalance();
+    public CurrentAccount depositToCurrentAccount(double depositQuantity, CurrentAccount currentAccount) throws NegativeValuesException {
+        CurrentAccount currentAccountClone = new CurrentAccount(currentAccount.getId());
+        currentAccountClone.deposit(depositQuantity);
+        return currentAccountClone;
     }
 
     public double withdrawFromCurrentAccount(double withdrawQuantity, CurrentAccount currentAccount) throws ValueUpper2000Exception, ValueUpperBalanceException, NegativeValuesException {
@@ -50,25 +51,21 @@ public class ServiceBankAdmin {
         return currentAccount.getBalance();
     }
 
-    public double depositToSavingAccount(double depositQuantity, SavingsAccount savingsAccount) throws NegativeValuesException {
-        savingsAccount.deposit(depositQuantity);
-        return savingsAccount.getBalance();
+    public SavingsAccount depositToSavingAccount(double depositQuantity, SavingsAccount savingsAccount) throws NegativeValuesException {
+        SavingsAccount savingsAccountClone = new SavingsAccount(savingsAccount.getId());
+        savingsAccountClone.deposit(depositQuantity);
+        return savingsAccountClone;
     }
 
-    public double withdrawFromSavingAccount(double withdrawQuantity, SavingsAccount savingAccount) throws ValueUpperBalanceException, NegativeValuesException, ValueUpper1000Exception {
-        savingAccount.withdraw(withdrawQuantity);
-        return savingAccount.getBalance();
+    public SavingsAccount withdrawFromSavingAccount(double withdrawQuantity, SavingsAccount savingAccount) throws ValueUpperBalanceException, NegativeValuesException, ValueUpper1000Exception {
+        SavingsAccount savingAccountClone = new SavingsAccount(savingAccount.getId());
+        savingAccountClone.withdraw(withdrawQuantity);
+        return savingAccountClone;
     }
 
-    public double transferBetweenSavingAccounts(SavingsAccount accountBankTransmitter, SavingsAccount accountBankReceiver, double transferQuantity) throws ValueUpperBalanceException, NegativeValuesException, ValueUpper1000Exception {
-        accountBankTransmitter.withdraw(transferQuantity);
-        accountBankReceiver.deposit(transferQuantity);
+    public double transferBetweenAccounts(AccountBank accountBankTransmitter, AccountBank accountBankReceiver, double transferQuantity) throws ValueUpper2000Exception, ValueUpperBalanceException, NegativeValuesException, ValueUpper1000Exception {
+       accountBankTransmitter.withdraw(transferQuantity);
+       accountBankReceiver.deposit(transferQuantity);
         return accountBankReceiver.getBalance();
-    }
-
-    public double transferBetweenCurrentAccounts(AccountBank accountBankTransmitter, AccountBank accountBankReceiver, double transferQuantity) throws ValueUpper2000Exception, ValueUpperBalanceException, NegativeValuesException {
-        ((CurrentAccount)accountBankTransmitter).withdraw(transferQuantity);
-        ((CurrentAccount)accountBankReceiver).deposit(transferQuantity);
-        return ((CurrentAccount)accountBankReceiver).getBalance();
     }
 }

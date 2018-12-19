@@ -13,13 +13,19 @@ abstract public class AccountBank {
     protected String id;
 
 
-    abstract void deposit(double depositQuantity) throws NegativeValuesException;
+    public abstract void deposit(double depositQuantity) throws NegativeValuesException;
 
-    abstract void withdraw(double withdrawQuantity) throws NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception, ValueUpper1000Exception;
+    public abstract void withdraw(double withdrawQuantity) throws NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception, ValueUpper1000Exception;
 
     public String getId(){
         return this.id;
     }
 
+
+    public double getBalance(){
+        return this.balance;
+    }
+
+    public abstract AccountBank clone();
 
 }

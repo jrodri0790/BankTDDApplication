@@ -37,10 +37,6 @@ public class SavingsAccount extends AccountBank{
 
     }
 
-    public double getBalance() {
-        return this.balance;
-    }
-
     public double getInterest() {
         return this.interest;
         // o return 0.0001
@@ -49,5 +45,16 @@ public class SavingsAccount extends AccountBank{
     public String getStatus() {
         return status;
     }
+
+    public SavingsAccount clone(){
+        SavingsAccount savingsAccountClone = new SavingsAccount(this.id);
+
+        savingsAccountClone.balance = this.balance;
+        savingsAccountClone.interest = this.interest;
+        savingsAccountClone.status = this.status;
+        return savingsAccountClone;
+    }
+
+
 
 }

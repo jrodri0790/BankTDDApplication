@@ -100,5 +100,17 @@ public class SavingsAccountTest {
         assertThat(savingsAccount.getId(), is(id));
     }
 
+    @Test
+    public void testShouldClone(){
+        SavingsAccount savingsAccount = new SavingsAccount("4");
+
+        SavingsAccount savingsAccountResult = savingsAccount.clone();
+
+        assertThat(savingsAccountResult.getId(), is(savingsAccount.getId()));
+        assertThat(savingsAccountResult.getInterest(), is(savingsAccount.getInterest()));
+        assertThat(savingsAccountResult.getStatus(), is(savingsAccount.getStatus()));
+        assertThat(savingsAccountResult.getBalance(), is(savingsAccount.getBalance()));
+    }
+
 
 }

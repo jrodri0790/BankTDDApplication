@@ -122,7 +122,7 @@ public class ServiceBankAdminTest {
         double depositQuantity = 120.00;
         CurrentAccount currentAccount = new CurrentAccount("1");
 
-        double depositQuantityResult = serviceBankAdmin.depositToCurrentAccount(depositQuantity, currentAccount);
+        double depositQuantityResult = serviceBankAdmin.depositToCurrentAccount(depositQuantity, currentAccount).getBalance();
 
         assertThat(depositQuantityResult, is(depositQuantity-depositQuantity*0.01));
     }
@@ -133,20 +133,21 @@ public class ServiceBankAdminTest {
         double depositQuantity = 120.00;
         double withdrawQuantity = 80.00;
         CurrentAccount currentAccount = new CurrentAccount("1");
-        double currentBalanceQuantity  = serviceBankAdmin.depositToCurrentAccount(depositQuantity, currentAccount);
+        CurrentAccount currentAccountResult = serviceBankAdmin.depositToCurrentAccount(depositQuantity, currentAccount);
+        double currentBalanceQuantity  = currentAccountResult.getBalance();
 
-        double withdrawQuantityResult = serviceBankAdmin.withdrawFromCurrentAccount(withdrawQuantity, currentAccount);
+        double withdrawQuantityResult = serviceBankAdmin.withdrawFromCurrentAccount(withdrawQuantity, currentAccountResult);
 
         assertThat(withdrawQuantityResult,is(currentBalanceQuantity - withdrawQuantity));
     }
 
 
     @Test
-    public void testShouldDepositToSavingtAccount() throws NegativeValuesException {
+    public void testShouldDepositToSavingAccount() throws NegativeValuesException {
         double depositQuantity = 100.00;
         SavingsAccount savingsAccount = new SavingsAccount("1");
 
-        double depositQuantityResult = serviceBankAdmin.depositToSavingAccount(depositQuantity, savingsAccount);
+        double depositQuantityResult = serviceBankAdmin.depositToSavingAccount(depositQuantity, savingsAccount).getBalance();
 
         assertThat(depositQuantityResult, is(depositQuantity));
     }
@@ -157,36 +158,38 @@ public class ServiceBankAdminTest {
         double depositQuantity = 120.00;
         double withdrawQuantity = 80.00;
         SavingsAccount savingAccount = new SavingsAccount("1");
-        double currentBalanceQuantity  = serviceBankAdmin.depositToSavingAccount(depositQuantity, savingAccount);
 
-        double withdrawQuantityResult = serviceBankAdmin.withdrawFromSavingAccount(withdrawQuantity, savingAccount);
+        SavingsAccount savingAccountResult = serviceBankAdmin.depositToSavingAccount(depositQuantity, savingAccount);
+        double currentBalanceQuantity  = savingAccountResult.getBalance();
+
+        double withdrawQuantityResult = serviceBankAdmin.withdrawFromSavingAccount(withdrawQuantity, savingAccountResult).getBalance();
 
         assertThat(withdrawQuantityResult,is(currentBalanceQuantity - withdrawQuantity));
     }
 
     @Test
-    public void testShouldTransferBetweenSavingAccount() throws NegativeValuesException, ValueUpperBalanceException, ValueUpper1000Exception {
+    public void testShouldTransferBetweenSavingAccount() throws NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception, ValueUpper1000Exception {
         double transferQuantity = 100.00;
         double depostiQuantity = 250.00;
-        SavingsAccount accountBankTransmitter = new SavingsAccount("2");
+        AccountBank accountBankTransmitter = new SavingsAccount("2");
         accountBankTransmitter.deposit(depostiQuantity);
-        SavingsAccount accountBankReceiver = new SavingsAccount("3");
+        AccountBank accountBankReceiver = new SavingsAccount("3");
 
-        double currentBalanceAccountBankReceiver = serviceBankAdmin.transferBetweenSavingAccounts(accountBankTransmitter, accountBankReceiver, transferQuantity);
+        double currentBalanceAccountBankReceiver = serviceBankAdmin.transferBetweenAccounts(accountBankTransmitter, accountBankReceiver, transferQuantity);
 
         assertThat(currentBalanceAccountBankReceiver, is(transferQuantity));
     }
 
 
     @Test
-    public void testShouldTransferBetweenCurrentAccount() throws NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception {
+    public void testShouldTransferBetweenCurrentAccount() throws NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception, ValueUpper1000Exception {
         double transferQuantity = 100.00;
         double depostiQuantity = 250.00;
         AccountBank accountBankTransmitter = new CurrentAccount("45");
-        ((CurrentAccount) accountBankTransmitter).deposit(depostiQuantity);
+        accountBankTransmitter.deposit(depostiQuantity);
         AccountBank accountBankReceiver = new CurrentAccount("55");
 
-        double currentBalanceAccountBankReceiver = serviceBankAdmin.transferBetweenCurrentAccounts(accountBankTransmitter, accountBankReceiver, transferQuantity);
+        double currentBalanceAccountBankReceiver = serviceBankAdmin.transferBetweenAccounts(accountBankTransmitter, accountBankReceiver, transferQuantity);
 
         assertThat(currentBalanceAccountBankReceiver, is(transferQuantity-transferQuantity*0.01));
     }
