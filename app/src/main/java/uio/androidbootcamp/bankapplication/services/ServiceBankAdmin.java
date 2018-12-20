@@ -1,9 +1,6 @@
 package uio.androidbootcamp.bankapplication.services;
 
-import uio.androidbootcamp.bankapplication.entities.AccountBank;
-import uio.androidbootcamp.bankapplication.entities.Client;
-import uio.androidbootcamp.bankapplication.entities.CurrentAccount;
-import uio.androidbootcamp.bankapplication.entities.SavingsAccount;
+import uio.androidbootcamp.bankapplication.entities.*;
 import uio.androidbootcamp.bankapplication.exceptions.NegativeValuesException;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpper1000Exception;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpper2000Exception;
@@ -41,7 +38,6 @@ public class ServiceBankAdmin {
     }
 
     public CurrentAccount depositToCurrentAccount(double depositQuantity, CurrentAccount currentAccount) throws NegativeValuesException {
-        //CurrentAccount currentAccountClone = new CurrentAccount(currentAccount.getId());
         CurrentAccount currentAccountClone = currentAccount.clone();
         currentAccountClone.deposit(depositQuantity);
         return currentAccountClone;
@@ -53,22 +49,22 @@ public class ServiceBankAdmin {
     }
 
     public SavingsAccount depositToSavingAccount(double depositQuantity, SavingsAccount savingsAccount) throws NegativeValuesException {
-        //SavingsAccount savingsAccountClone = new SavingsAccount(savingsAccount.getId());
         SavingsAccount savingsAccountClone = savingsAccount.clone();
         savingsAccountClone.deposit(depositQuantity);
         return savingsAccountClone;
     }
 
     public SavingsAccount withdrawFromSavingAccount(double withdrawQuantity, SavingsAccount savingAccount) throws ValueUpperBalanceException, NegativeValuesException, ValueUpper1000Exception {
-        //SavingsAccount savingAccountClone = new SavingsAccount(savingAccount.getId());
         SavingsAccount savingAccountClone = savingAccount.clone();
         savingAccountClone.withdraw(withdrawQuantity);
         return savingAccountClone;
     }
 
-    public double transferBetweenAccounts(AccountBank accountBankTransmitter, AccountBank accountBankReceiver, double transferQuantity) throws ValueUpper2000Exception, ValueUpperBalanceException, NegativeValuesException, ValueUpper1000Exception {
-       accountBankTransmitter.withdraw(transferQuantity);
-       accountBankReceiver.deposit(transferQuantity);
-        return accountBankReceiver.getBalance();
+    public TransferAccounts transferBetweenAccounts(AccountBank accountBankTransmitter, AccountBank accountBankReceiver, double transferQuantity) throws ValueUpper2000Exception, ValueUpperBalanceException, NegativeValuesException, ValueUpper1000Exception {
+        AccountBank accountBankTransmitterClone = accountBankTransmitter.clone();
+        AccountBank accountBankReceiverClone = accountBankReceiver.clone();
+        accountBankTransmitterClone.withdraw(transferQuantity);
+        accountBankReceiverClone.deposit(transferQuantity);
+        return new TransferAccounts(accountBankTransmitterClone, accountBankReceiverClone);
     }
 }
