@@ -1,8 +1,15 @@
 package uio.androidbootcamp.bankapplication;
 
+import uio.androidbootcamp.bankapplication.entities.Client;
+import uio.androidbootcamp.bankapplication.entities.PrinterBank;
+import uio.androidbootcamp.bankapplication.services.ServiceBankAdmin;
+
 import java.util.Scanner;
 
 public class MainBank {
+
+    static Scanner scanner = new Scanner(System.in);
+    static ServiceBankAdmin serviceBankAdmin = new ServiceBankAdmin();
 
 
     public static void printMenu(){
@@ -30,14 +37,15 @@ public class MainBank {
 
 
 
-    public static void catchMenuOption(int selectedOption){
+
+    private static void catchMenuOption(int selectedOption){
 
         switch (selectedOption){
             case 1:
-                System.out.println("Opcion 1");
+                createClient();
                 break;
             case 2:
-                System.out.println("Opcion 2");
+                createAccounts();
                 break;
             case 3:
                 System.out.println("Opcion 3");
@@ -52,16 +60,62 @@ public class MainBank {
                 System.out.println("Opcion 6");
                 break;
             case 7:
-                System.out.println("Opcion 7");
+                showClientInfo();
                 break;
             case 8: System.exit(0);
         }
     }
 
+    private static void createAccounts() {
+        String idAccount = "";
+        String type = "";
+        System.out.println("Opcion 2");
+        System.out.println("Seleccione 1 para cuenta de ahorros o 2 para cuenta corriente");
+        type = scanner.next();
+        int typeInteger = Integer.parseInt(type);
+        if (typeInteger < 1 || typeInteger > 2) {
+            System.out.println("Opcion no valida");
+        }else{
+            System.out.println("Ingrese el numero de la cuenta");
+            createAccount(typeInteger);
+        }
+    }
+
+    private static void createAccount(int option){
+        String idAccount = scanner.next();
+        if(option == 1){
+            serviceBankAdmin.createSavingAccount(idAccount);
+        }else{
+            serviceBankAdmin.createCurrentAccount(idAccount);
+        }
+        System.out.println("Cuenta creada");
+    }
+
+    private static void showClientInfo() {
+        System.out.println("Los datos de los clientes son:");
+        for(Client client: serviceBankAdmin.getClients()){
+            System.out.println(PrinterBank.printClientInfo(client));
+        }
+    }
+
+    private static void createClient() {
+        String name = "";
+        String lastName = "";
+        String identification = "";
+        System.out.println("Ingrese los datos del cliente: nombre");
+        name = scanner.next();
+        System.out.println("Ingrese los datos del cliente: apellido");
+        lastName = scanner.next();
+        System.out.println("Ingrese los datos del cliente: identificacion");
+        identification = scanner.next();
+        serviceBankAdmin.createClient(name, lastName, identification);
+        System.out.println("El usuario ha sido guardado.");
+    }
+
 
     public static void main(String[] args){
 
-        Scanner scanner = new Scanner(System.in);
+
         String selectedOption ="";
         do{
             printMenu();

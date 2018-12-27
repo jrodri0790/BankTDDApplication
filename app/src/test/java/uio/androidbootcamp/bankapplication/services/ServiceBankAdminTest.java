@@ -8,6 +8,8 @@ import uio.androidbootcamp.bankapplication.exceptions.ValueUpper1000Exception;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpper2000Exception;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
 
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -242,6 +244,38 @@ public class ServiceBankAdminTest {
         assertThat(transferAccountsResult.accountTransmitter.getBalance(), is(expectedBalanceAccountTransmitter));
         assertThat(transferAccountsResult.accountReceiver.getBalance(), is(transferQuantity));
     }
+
+
+    @Test
+    public void testShouldSaveClientsWhenCreateClient(){
+        String name = "Pedro";
+        String lastName = "Alvarez";
+        String id = "67";
+
+        serviceBankAdmin.createClient(name, lastName,id);
+
+        assertThat(serviceBankAdmin.getClients().get(0).getName(), is(name));
+    }
+
+     @Test
+    public void testShouldSaveCurrentAccountWhenCreateCurrentAccount(){
+        String id = "90";
+
+        serviceBankAdmin.createCurrentAccount(id);
+
+        assertThat(serviceBankAdmin.getCurrentAccounts().get(0).getId(), is(id));
+     }
+
+     @Test
+    public void testShouldSaveSavingAccountWhenCreateSavingAccount(){
+        String id = "788";
+
+        serviceBankAdmin.createSavingAccount(id);
+
+        assertThat(serviceBankAdmin.getSavingAccounts().get(0).getId(), is(id));
+     }
+
+
 
 
 

@@ -6,19 +6,38 @@ import uio.androidbootcamp.bankapplication.exceptions.ValueUpper1000Exception;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpper2000Exception;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ServiceBankAdmin {
 
+    private List<Client> clients;
+    private List<CurrentAccount> currentAccounts;
+    private List<SavingsAccount> savingsAccounts;
+
+    public ServiceBankAdmin(){
+        this.clients = new ArrayList<>();
+        this.currentAccounts = new ArrayList<>();
+        this.savingsAccounts = new ArrayList<>();
+    }
+
     public Client createClient(String name, String lastName, String id) {
-        return new Client(name, lastName, id);
+        Client newClient = new Client(name, lastName, id);
+        this.clients.add(newClient);
+        return newClient;
     }
 
 
     public AccountBank createCurrentAccount(String id) {
-        return new CurrentAccount(id);
+        CurrentAccount currentAccount = new CurrentAccount(id);
+        currentAccounts.add(currentAccount);
+        return currentAccount;
     }
 
     public AccountBank createSavingAccount(String id){
-        return new SavingsAccount(id);
+        SavingsAccount savingsAccount = new SavingsAccount(id);
+        savingsAccounts.add(savingsAccount);
+        return savingsAccount;
     }
 
     public Client addAccountToClient(Client client, AccountBank accountBank) {
@@ -66,5 +85,17 @@ public class ServiceBankAdmin {
         accountBankTransmitterClone.withdraw(transferQuantity);
         accountBankReceiverClone.deposit(transferQuantity);
         return new TransferAccounts(accountBankTransmitterClone, accountBankReceiverClone);
+    }
+
+    public List<Client> getClients() {
+        return clients;
+    }
+
+    public List<CurrentAccount> getCurrentAccounts() {
+        return this.currentAccounts;
+    }
+
+    public List<SavingsAccount> getSavingAccounts() {
+        return savingsAccounts;
     }
 }
