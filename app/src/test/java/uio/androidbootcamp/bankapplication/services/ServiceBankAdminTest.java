@@ -9,6 +9,7 @@ import uio.androidbootcamp.bankapplication.exceptions.ValueUpper2000Exception;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
 
 import java.util.List;
+import java.util.concurrent.atomic.DoubleAccumulator;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -299,6 +300,22 @@ public class ServiceBankAdminTest {
         AccountBank accountBank = serviceBankAdmin.searchAccountBank(id);
 
         assertThat(accountBank.getId(), is(id));
+    }
+
+    @Test
+    public void testShouldRemoveAccountWhenAccountIsAddedToClient(){
+        String id = "12";
+        String name = "Felipe";
+        String lastName = "Portilla";
+        Client client = serviceBankAdmin.createClient(name, lastName, id);
+        String idAccount = "89";
+        AccountBank currentAccountBank = serviceBankAdmin.createCurrentAccount("12");
+        AccountBank savingAccountBank = serviceBankAdmin.createSavingAccount("89");
+
+        Client clientResult = serviceBankAdmin.addAccountToClient(client, savingAccountBank);
+
+        assertThat(serviceBankAdmin.getSavingAccounts().size(), is(0));
+
     }
 
 }
