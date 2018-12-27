@@ -1,7 +1,9 @@
 package uio.androidbootcamp.bankapplication;
 
 import uio.androidbootcamp.bankapplication.entities.Client;
+import uio.androidbootcamp.bankapplication.entities.CurrentAccount;
 import uio.androidbootcamp.bankapplication.entities.PrinterBank;
+import uio.androidbootcamp.bankapplication.entities.SavingsAccount;
 import uio.androidbootcamp.bankapplication.services.ServiceBankAdmin;
 
 import java.util.Scanner;
@@ -22,7 +24,8 @@ public class MainBank {
         String opcDoWithdraw = "5: Withdraw";
         String opcTransfer = "6: Transfer";
         String opcPrint = "7: Print clients and accounts information";
-        String opcSalir = "8: Exit";
+        String opcPrintFreeAccounts = "8: Print free accounts information";
+        String opcSalir = "9: Exit";
 
         System.out.println(opcMain);
         System.out.println(opcCreateClient);
@@ -32,6 +35,7 @@ public class MainBank {
         System.out.println(opcDoWithdraw);
         System.out.println(opcTransfer);
         System.out.println(opcPrint);
+        System.out.println(opcPrintFreeAccounts);
         System.out.println(opcSalir);
     }
 
@@ -49,6 +53,8 @@ public class MainBank {
                 break;
             case 3:
                 System.out.println("Opcion 3");
+                Client client = serviceBankAdmin.getClients().get();
+                serviceBankAdmin.addAccountToClient()
                 break;
             case 4:
                 System.out.println("Opcion 4");
@@ -62,7 +68,20 @@ public class MainBank {
             case 7:
                 showClientInfo();
                 break;
-            case 8: System.exit(0);
+            case 8:
+                showAvailableAccountInfo();
+                break;
+            case 9: System.exit(0);
+        }
+    }
+
+    private static void showAvailableAccountInfo() {
+        System.out.println("Los cuentas disponibles son:");
+        for(CurrentAccount currentAccount: serviceBankAdmin.getCurrentAccounts()){
+            System.out.println(PrinterBank.printAccountInfo(currentAccount));
+        }
+        for(SavingsAccount savingsAccount: serviceBankAdmin.getSavingAccounts()){
+            System.out.println(PrinterBank.printAccountInfo(savingsAccount));
         }
     }
 
@@ -122,6 +141,6 @@ public class MainBank {
             selectedOption = scanner.next();
             System.out.println("selectedOption: " + selectedOption);
             catchMenuOption(Integer.valueOf(selectedOption));
-        }while(!selectedOption.equals("8"));
+        }while(!selectedOption.equals("9"));
     }
 }
