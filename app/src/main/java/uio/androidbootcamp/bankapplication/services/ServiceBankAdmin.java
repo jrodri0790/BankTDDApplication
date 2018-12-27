@@ -98,4 +98,40 @@ public class ServiceBankAdmin {
     public List<SavingsAccount> getSavingAccounts() {
         return savingsAccounts;
     }
+
+    public Client searchClient(String id) {
+        int index = getClients().size()-1;
+        Client client = null;
+        while(index > -1){
+            if(getClients().get(index).getId().equals(id)){
+                client = getClients().get(index);
+                break;
+            }
+            index -=index;
+        }
+        return client;
+    }
+
+
+    public AccountBank searchAccountBank(String id) {
+        int indexCurrentAccount = getCurrentAccounts().size()-1;
+        int indexSavingAccount = getSavingAccounts().size()-1;
+        AccountBank accountBank = null;
+        while(indexCurrentAccount > -1){
+            if(getCurrentAccounts().get(indexCurrentAccount).getId().equals(id)){
+                accountBank = getCurrentAccounts().get(indexCurrentAccount);
+                break;
+            }
+            indexCurrentAccount =indexCurrentAccount-1;
+        }
+        while(indexSavingAccount > -1){
+            if(getSavingAccounts().get(indexSavingAccount).getId().equals(id)){
+                accountBank = getSavingAccounts().get(indexSavingAccount);
+                break;
+            }
+            indexSavingAccount =indexSavingAccount-1;
+        }
+        return accountBank;
+
+    }
 }

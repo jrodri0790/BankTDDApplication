@@ -276,11 +276,29 @@ public class ServiceBankAdminTest {
      }
 
 
+     @Test
+    public void testShouldReturnClientWhenIdIsGiven(){
+        String id = "12";
+        String name = "Felipe";
+        String lastName = "Portilla";
+        serviceBankAdmin.createClient(name, lastName, id);
+        List<Client> clients = serviceBankAdmin.getClients();
+
+        Client client = serviceBankAdmin.searchClient(id);
+
+        assertThat(client.getId(), is(id));
+    }
 
 
+    @Test
+    public void testShouldReturnAccountWhenIdIsGiven(){
+        String id = "89";
+        serviceBankAdmin.createCurrentAccount("12");
+        serviceBankAdmin.createSavingAccount("89");
 
+        AccountBank accountBank = serviceBankAdmin.searchAccountBank(id);
 
-
-
+        assertThat(accountBank.getId(), is(id));
+    }
 
 }
