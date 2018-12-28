@@ -3,13 +3,7 @@ package uio.androidbootcamp.bankapplication.services;
 import org.junit.Before;
 import org.junit.Test;
 import uio.androidbootcamp.bankapplication.entities.*;
-import uio.androidbootcamp.bankapplication.exceptions.NegativeValuesException;
-import uio.androidbootcamp.bankapplication.exceptions.ValueUpper1000Exception;
-import uio.androidbootcamp.bankapplication.exceptions.ValueUpper2000Exception;
-import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
-
-import java.util.List;
-import java.util.concurrent.atomic.DoubleAccumulator;
+import uio.androidbootcamp.bankapplication.exceptions.*;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -278,21 +272,25 @@ public class ServiceBankAdminTest {
 
 
      @Test
-    public void testShouldReturnClientWhenIdIsGiven(){
+    public void testShouldReturnClientWhenIdIsGiven() throws ClientNotFoundException {
         String id = "12";
         String name = "Felipe";
         String lastName = "Portilla";
         serviceBankAdmin.createClient(name, lastName, id);
-        List<Client> clients = serviceBankAdmin.getClients();
 
         Client client = serviceBankAdmin.searchClient(id);
 
         assertThat(client.getId(), is(id));
     }
 
+    @Test (expected = ClientNotFoundException.class)
+    public void testShouldThrowExceptionWhenClientIsNotFound() throws ClientNotFoundException {
+        serviceBankAdmin.searchClient("2");
+    }
+
 
     @Test
-    public void testShouldReturnAccountWhenIdIsGiven(){
+    public void testShouldReturnAccountWhenIdIsGiven() throws AccountBankNotFoundException {
         String id = "89";
         serviceBankAdmin.createCurrentAccount("12");
         serviceBankAdmin.createSavingAccount("89");
@@ -302,19 +300,28 @@ public class ServiceBankAdminTest {
         assertThat(accountBank.getId(), is(id));
     }
 
+    @Test (expected = AccountBankNotFoundException.class)
+    public void testShouldReturnExceptionWhenAccountIsNotFound() throws AccountBankNotFoundException {
+        serviceBankAdmin.searchAccountBank("4");
+    }
+
     @Test
     public void testShouldRemoveAccountWhenAccountIsAddedToClient(){
         String id = "12";
         String name = "Felipe";
         String lastName = "Portilla";
         Client client = serviceBankAdmin.createClient(name, lastName, id);
-        String idAccount = "89";
-        AccountBank currentAccountBank = serviceBankAdmin.createCurrentAccount("12");
+        serviceBankAdmin.createCurrentAccount("12");
         AccountBank savingAccountBank = serviceBankAdmin.createSavingAccount("89");
 
-        Client clientResult = serviceBankAdmin.addAccountToClient(client, savingAccountBank);
+        assertThat(serviceBankAdmin.getSavingAccounts().size(), is(1));
+        assertThat(serviceBankAdmin.getCurrentAccounts().size(), is(1));
 
+        serviceBankAdmin.addAccountToClient(client, savingAccountBank);
+
+        assertThat(serviceBankAdmin.getCurrentAccounts().size(), is(1));
         assertThat(serviceBankAdmin.getSavingAccounts().size(), is(0));
+
 
     }
 

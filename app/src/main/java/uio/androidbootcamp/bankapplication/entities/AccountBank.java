@@ -5,6 +5,8 @@ import uio.androidbootcamp.bankapplication.exceptions.ValueUpper1000Exception;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpper2000Exception;
 import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
 
+import java.util.Objects;
+
 abstract public class AccountBank {
 
     protected double interest;
@@ -16,6 +18,20 @@ abstract public class AccountBank {
     public abstract void deposit(double depositQuantity) throws NegativeValuesException;
 
     public abstract void withdraw(double withdrawQuantity) throws NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception, ValueUpper1000Exception;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AccountBank)) return false;
+        AccountBank that = (AccountBank) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     public String getId(){
         return this.id;

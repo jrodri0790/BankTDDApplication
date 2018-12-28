@@ -1,10 +1,7 @@
 package uio.androidbootcamp.bankapplication.services;
 
 import uio.androidbootcamp.bankapplication.entities.*;
-import uio.androidbootcamp.bankapplication.exceptions.NegativeValuesException;
-import uio.androidbootcamp.bankapplication.exceptions.ValueUpper1000Exception;
-import uio.androidbootcamp.bankapplication.exceptions.ValueUpper2000Exception;
-import uio.androidbootcamp.bankapplication.exceptions.ValueUpperBalanceException;
+import uio.androidbootcamp.bankapplication.exceptions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +49,9 @@ public class ServiceBankAdmin {
         }
 
         clientClone.addOneAccount(accountBankClone);
+        deleteAccount(accountBank);
+        getClients().remove(client);
+        getClients().add(clientClone);
 
         return clientClone;
     }
@@ -99,7 +99,7 @@ public class ServiceBankAdmin {
         return savingsAccounts;
     }
 
-    public Client searchClient(String id) {
+    public Client searchClient(String id) throws ClientNotFoundException {
         int index = getClients().size()-1;
         Client client = null;
         while(index > -1){
@@ -109,11 +109,14 @@ public class ServiceBankAdmin {
             }
             index -=index;
         }
+
+        if(client == null) throw new ClientNotFoundException();
+
         return client;
     }
 
 
-    public AccountBank searchAccountBank(String id) {
+    public AccountBank searchAccountBank(String id) throws AccountBankNotFoundException{
         int indexCurrentAccount = getCurrentAccounts().size()-1;
         int indexSavingAccount = getSavingAccounts().size()-1;
         AccountBank accountBank = null;
@@ -124,6 +127,7 @@ public class ServiceBankAdmin {
             }
             indexCurrentAccount =indexCurrentAccount-1;
         }
+
         while(indexSavingAccount > -1){
             if(getSavingAccounts().get(indexSavingAccount).getId().equals(id)){
                 accountBank = getSavingAccounts().get(indexSavingAccount);
@@ -131,7 +135,21 @@ public class ServiceBankAdmin {
             }
             indexSavingAccount =indexSavingAccount-1;
         }
+
+        if(accountBank == null) throw new AccountBankNotFoundException();
+
         return accountBank;
+
+    }
+
+    private void deleteAccount(AccountBank accountBank){
+        if(accountBank instanceof CurrentAccount){
+            getCurrentAccounts().remove(accountBank);
+        }
+
+        if(accountBank instanceof  SavingsAccount){
+            getSavingAccounts().remove(accountBank);
+        }
 
     }
 }

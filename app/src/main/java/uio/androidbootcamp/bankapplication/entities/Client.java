@@ -2,6 +2,7 @@ package uio.androidbootcamp.bankapplication.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Client {
     private List<AccountBank> accountsBank;
@@ -14,6 +15,21 @@ public class Client {
         this.lastName = lastName;
         this.id = id;
         this.accountsBank = new ArrayList<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Client)) return false;
+        Client client = (Client) o;
+        return Objects.equals(id, client.id);
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
 
     public String getName() {

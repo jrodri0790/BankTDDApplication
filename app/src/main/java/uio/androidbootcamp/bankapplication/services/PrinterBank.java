@@ -1,4 +1,7 @@
-package uio.androidbootcamp.bankapplication.entities;
+package uio.androidbootcamp.bankapplication.services;
+
+import uio.androidbootcamp.bankapplication.entities.AccountBank;
+import uio.androidbootcamp.bankapplication.entities.Client;
 
 public class PrinterBank {
     public static String printClientInfo(Client client) {

@@ -2,7 +2,9 @@ package uio.androidbootcamp.bankapplication;
 
 import uio.androidbootcamp.bankapplication.entities.Client;
 import uio.androidbootcamp.bankapplication.entities.CurrentAccount;
-import uio.androidbootcamp.bankapplication.entities.PrinterBank;
+import uio.androidbootcamp.bankapplication.exceptions.AccountBankNotFoundException;
+import uio.androidbootcamp.bankapplication.exceptions.ClientNotFoundException;
+import uio.androidbootcamp.bankapplication.services.PrinterBank;
 import uio.androidbootcamp.bankapplication.entities.SavingsAccount;
 import uio.androidbootcamp.bankapplication.services.ServiceBankAdmin;
 
@@ -42,7 +44,7 @@ public class MainBank {
 
 
 
-    private static void catchMenuOption(int selectedOption){
+    private static void catchMenuOption(int selectedOption) throws ClientNotFoundException, AccountBankNotFoundException {
 
         switch (selectedOption){
             case 1:
@@ -52,9 +54,13 @@ public class MainBank {
                 createAccounts();
                 break;
             case 3:
-                System.out.println("Opcion 3");
-                //Client client = serviceBankAdmin.getClients().get();
-                //serviceBankAdmin.addAccountToClient()
+                String idClient = "";
+                String idCuenta ="";
+                System.out.println("Digite id del cliente a quien desea asociar una cuenta");
+                idClient = scanner.next();
+                System.out.println("Digite id de la cuenta que desea asociar");
+                idCuenta = scanner.next();
+                serviceBankAdmin.addAccountToClient(serviceBankAdmin.searchClient(idClient), serviceBankAdmin.searchAccountBank(idCuenta));
                 break;
             case 4:
                 System.out.println("Opcion 4");
@@ -75,7 +81,7 @@ public class MainBank {
         }
     }
 
-    private static void showAvailableAccountInfo() {
+    private static void  showAvailableAccountInfo() {
         System.out.println("Los cuentas disponibles son:");
         for(CurrentAccount currentAccount: serviceBankAdmin.getCurrentAccounts()){
             System.out.println(PrinterBank.printAccountInfo(currentAccount));
@@ -132,7 +138,7 @@ public class MainBank {
     }
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws AccountBankNotFoundException, ClientNotFoundException {
 
 
         String selectedOption ="";
