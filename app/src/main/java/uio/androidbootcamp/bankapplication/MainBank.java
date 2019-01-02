@@ -63,7 +63,7 @@ public class MainBank {
                 withdraw();
                 break;
             case 6:
-                System.out.println("transfer();");
+                transfer();
                 break;
             case 7:
                 showClientInfo();
@@ -72,6 +72,48 @@ public class MainBank {
                 showAvailableAccountInfo();
                 break;
             case 9: System.exit(0);
+        }
+    }
+
+
+    private static void transfer() throws ClientNotFoundException, AccountBankNotFoundException, ValueUpper2000Exception, ValueUpperBalanceException, NegativeValuesException, ValueUpper1000Exception {
+        String idClient = "";
+        String idAccountReceiver = null;
+        String idAccountTransmitter = null;
+        String transferQuantity = "";
+        AccountBank accountBankTransmitterResultResult = null;
+        AccountBank accountBankReceiverResultResult = null;
+        System.out.println("Digite id del dueno de la cuenta a debitar");
+        idClient = scanner.next();
+        System.out.println("Digite id de la cuenta a debitar");
+        idAccountTransmitter = scanner.next();
+        AccountBank accountBankTransmitter = serviceBankAdmin.searchAccountOfClientGivenAccountId(idClient, idAccountTransmitter);
+        System.out.println("Digite id de la cuenta a acreditar");
+        idAccountReceiver = scanner.next();
+        AccountBank accountBankReceiver = serviceBankAdmin.searchAccountOfClientGivenAccountId(idClient, idAccountReceiver);
+        System.out.println("Digite la cantidad a transferir");
+        transferQuantity = scanner.next();
+
+        if(accountBankTransmitter instanceof CurrentAccount){
+            accountBankTransmitterResultResult = serviceBankAdmin.withdrawFromCurrentAccount(Double.valueOf(transferQuantity),(CurrentAccount)accountBankTransmitter);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().remove(accountBankTransmitter);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().add(accountBankTransmitterResultResult);
+        }
+        if(accountBankTransmitter instanceof SavingsAccount){
+            accountBankTransmitterResultResult = serviceBankAdmin.withdrawFromSavingAccount(Double.valueOf(transferQuantity), (SavingsAccount)accountBankTransmitter);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().remove(accountBankTransmitter);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().add(accountBankTransmitterResultResult);
+        }
+
+        if(accountBankReceiver instanceof CurrentAccount){
+            accountBankReceiverResultResult = serviceBankAdmin.depositToCurrentAccount(Integer.valueOf(transferQuantity),(CurrentAccount)accountBankReceiver);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().remove(accountBankReceiver);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().add(accountBankReceiverResultResult);
+        }
+        if(accountBankReceiver instanceof SavingsAccount){
+            accountBankReceiverResultResult = serviceBankAdmin.depositToSavingAccount(Integer.valueOf(transferQuantity), (SavingsAccount)accountBankReceiver);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().remove(accountBankReceiver);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().add(accountBankReceiverResultResult);
         }
     }
 
