@@ -64,7 +64,7 @@ public class ServiceBankAdmin {
 
     public CurrentAccount withdrawFromCurrentAccount(double withdrawQuantity, CurrentAccount currentAccount) throws ValueUpper2000Exception, ValueUpperBalanceException, NegativeValuesException {
         CurrentAccount currentAccountClone = currentAccount.clone();
-        currentAccount.withdraw(withdrawQuantity);
+        currentAccountClone.withdraw(withdrawQuantity);
         return currentAccountClone;
     }
 
