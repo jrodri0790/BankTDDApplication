@@ -51,4 +51,10 @@ public class Client {
     public List<AccountBank> getAccountsBank() {
         return this.accountsBank;
     }
+
+    public Client clone(){
+        Client clientClone = new Client(this.name, this.lastName, this.id);
+        clientClone.accountsBank = this.accountsBank;
+        return clientClone;
+    }
 }

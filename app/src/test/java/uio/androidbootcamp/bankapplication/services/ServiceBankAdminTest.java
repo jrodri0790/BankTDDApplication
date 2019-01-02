@@ -133,7 +133,7 @@ public class ServiceBankAdminTest {
         CurrentAccount currentAccountResult = serviceBankAdmin.depositToCurrentAccount(depositQuantity, currentAccount);
         double currentBalanceQuantity  = currentAccountResult.getBalance();
 
-        double withdrawQuantityResult = serviceBankAdmin.withdrawFromCurrentAccount(withdrawQuantity, currentAccountResult);
+        double withdrawQuantityResult = serviceBankAdmin.withdrawFromCurrentAccount(withdrawQuantity, currentAccountResult).getBalance();
 
         assertThat(withdrawQuantityResult,is(currentBalanceQuantity - withdrawQuantity));
     }
@@ -321,8 +321,24 @@ public class ServiceBankAdminTest {
 
         assertThat(serviceBankAdmin.getCurrentAccounts().size(), is(1));
         assertThat(serviceBankAdmin.getSavingAccounts().size(), is(0));
+    }
 
 
+    @Test
+    public void testShouldReturnAccountOfClientGivenIdAccount() throws NegativeValuesException, AccountBankNotFoundException, ClientNotFoundException {
+        String id = "12";
+        String name = "Felipe";
+        String lastName = "Portilla";
+        double depositQuantity = 55.00;
+        Client client = serviceBankAdmin.createClient(name, lastName, id);
+        AccountBank accountBank = new CurrentAccount("55");
+        serviceBankAdmin.addAccountToClient(client, accountBank);
+
+        AccountBank accountBankClient = serviceBankAdmin.searchAccountOfClientGivenAccountId(client.getId(), accountBank.getId());
+
+        double depositQuantityResult = serviceBankAdmin.depositToCurrentAccount(depositQuantity, (CurrentAccount) accountBankClient).getBalance();
+
+        assertThat(depositQuantityResult, is(depositQuantity-(depositQuantity*0.01)));
     }
 
 }

@@ -1,9 +1,9 @@
 package uio.androidbootcamp.bankapplication;
 
+import uio.androidbootcamp.bankapplication.entities.AccountBank;
 import uio.androidbootcamp.bankapplication.entities.Client;
 import uio.androidbootcamp.bankapplication.entities.CurrentAccount;
-import uio.androidbootcamp.bankapplication.exceptions.AccountBankNotFoundException;
-import uio.androidbootcamp.bankapplication.exceptions.ClientNotFoundException;
+import uio.androidbootcamp.bankapplication.exceptions.*;
 import uio.androidbootcamp.bankapplication.services.PrinterBank;
 import uio.androidbootcamp.bankapplication.entities.SavingsAccount;
 import uio.androidbootcamp.bankapplication.services.ServiceBankAdmin;
@@ -44,7 +44,7 @@ public class MainBank {
 
 
 
-    private static void catchMenuOption(int selectedOption) throws ClientNotFoundException, AccountBankNotFoundException {
+    private static void catchMenuOption(int selectedOption) throws ClientNotFoundException, AccountBankNotFoundException, NegativeValuesException, ValueUpperBalanceException, ValueUpper2000Exception, ValueUpper1000Exception {
 
         switch (selectedOption){
             case 1:
@@ -54,22 +54,16 @@ public class MainBank {
                 createAccounts();
                 break;
             case 3:
-                String idClient = "";
-                String idCuenta ="";
-                System.out.println("Digite id del cliente a quien desea asociar una cuenta");
-                idClient = scanner.next();
-                System.out.println("Digite id de la cuenta que desea asociar");
-                idCuenta = scanner.next();
-                serviceBankAdmin.addAccountToClient(serviceBankAdmin.searchClient(idClient), serviceBankAdmin.searchAccountBank(idCuenta));
+                addAccountToClient();
                 break;
             case 4:
-                System.out.println("Opcion 4");
+                deposit();
                 break;
             case 5:
-                System.out.println("Opcion 5");
+                System.out.println(";withdraw();");
                 break;
             case 6:
-                System.out.println("Opcion 6");
+                System.out.println("transfer();");
                 break;
             case 7:
                 showClientInfo();
@@ -79,6 +73,42 @@ public class MainBank {
                 break;
             case 9: System.exit(0);
         }
+    }
+
+
+
+    private static void deposit() throws ClientNotFoundException, AccountBankNotFoundException, NegativeValuesException {
+        String idClient = "";
+        String idCuenta ="";
+        String depositQuantity = "";
+        AccountBank accountBankResult = null;
+        System.out.println("Digite id del dueno de la cuenta");
+        idClient = scanner.next();
+        System.out.println("Digite id de la cuenta");
+        idCuenta = scanner.next();
+        AccountBank accountBank = serviceBankAdmin.searchAccountOfClientGivenAccountId(idClient, idCuenta);
+        System.out.println("Digite la cantidad a depositar");
+        depositQuantity = scanner.next();
+        if(accountBank instanceof CurrentAccount){
+            accountBankResult = serviceBankAdmin.depositToCurrentAccount(Integer.valueOf(depositQuantity),(CurrentAccount)accountBank);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().remove(accountBank);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().add(accountBankResult);
+        }
+        if(accountBank instanceof SavingsAccount){
+            accountBankResult = serviceBankAdmin.depositToSavingAccount(Integer.valueOf(depositQuantity), (SavingsAccount)accountBank);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().remove(accountBank);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().add(accountBankResult);
+        }
+    }
+
+    private static void addAccountToClient() throws ClientNotFoundException, AccountBankNotFoundException {
+        String idClient = "";
+        String idCuenta ="";
+        System.out.println("Digite id del cliente a quien desea asociar una cuenta");
+        idClient = scanner.next();
+        System.out.println("Digite id de la cuenta que desea asociar");
+        idCuenta = scanner.next();
+        serviceBankAdmin.addAccountToClient(serviceBankAdmin.searchClient(idClient), serviceBankAdmin.searchAccountBank(idCuenta));
     }
 
     private static void  showAvailableAccountInfo() {
@@ -138,9 +168,7 @@ public class MainBank {
     }
 
 
-    public static void main(String[] args) throws AccountBankNotFoundException, ClientNotFoundException {
-
-
+    public static void main(String[] args) throws AccountBankNotFoundException, ClientNotFoundException, NegativeValuesException, ValueUpper2000Exception, ValueUpperBalanceException, ValueUpper1000Exception {
         String selectedOption ="";
         do{
             printMenu();

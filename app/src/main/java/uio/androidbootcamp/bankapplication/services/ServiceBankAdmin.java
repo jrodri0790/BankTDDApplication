@@ -38,7 +38,7 @@ public class ServiceBankAdmin {
     }
 
     public Client addAccountToClient(Client client, AccountBank accountBank) {
-        Client clientClone = new Client(client.getName(), client.getLastName(), client.getId());
+        Client clientClone = client.clone();
         AccountBank accountBankClone = null;
 
         if(accountBank instanceof CurrentAccount){
@@ -62,9 +62,10 @@ public class ServiceBankAdmin {
         return currentAccountClone;
     }
 
-    public double withdrawFromCurrentAccount(double withdrawQuantity, CurrentAccount currentAccount) throws ValueUpper2000Exception, ValueUpperBalanceException, NegativeValuesException {
+    public CurrentAccount withdrawFromCurrentAccount(double withdrawQuantity, CurrentAccount currentAccount) throws ValueUpper2000Exception, ValueUpperBalanceException, NegativeValuesException {
+        CurrentAccount currentAccountClone = currentAccount.clone();
         currentAccount.withdraw(withdrawQuantity);
-        return currentAccount.getBalance();
+        return currentAccountClone;
     }
 
     public SavingsAccount depositToSavingAccount(double depositQuantity, SavingsAccount savingsAccount) throws NegativeValuesException {
@@ -139,7 +140,6 @@ public class ServiceBankAdmin {
         if(accountBank == null) throw new AccountBankNotFoundException();
 
         return accountBank;
-
     }
 
     private void deleteAccount(AccountBank accountBank){
@@ -151,5 +151,22 @@ public class ServiceBankAdmin {
             getSavingAccounts().remove(accountBank);
         }
 
+    }
+
+    public AccountBank searchAccountOfClientGivenAccountId(String idClient, String idAccount) throws ClientNotFoundException, AccountBankNotFoundException {
+        Client client = searchClient(idClient);
+        int indexBankAccount = client.getAccountsBank().size()-1;
+        AccountBank accountBank = null;
+        while(indexBankAccount > -1){
+            if(client.getAccountsBank().get(indexBankAccount).getId().equals(idAccount)){
+                accountBank = client.getAccountsBank().get(indexBankAccount);
+                break;
+            }
+            indexBankAccount =indexBankAccount-1;
+        }
+
+        if(accountBank == null) throw new AccountBankNotFoundException();
+
+        return accountBank;
     }
 }
