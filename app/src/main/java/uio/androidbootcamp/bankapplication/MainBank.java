@@ -60,7 +60,7 @@ public class MainBank {
                 deposit();
                 break;
             case 5:
-                System.out.println(";withdraw();");
+                withdraw();
                 break;
             case 6:
                 System.out.println("transfer();");
@@ -76,6 +76,29 @@ public class MainBank {
     }
 
 
+    private static void withdraw() throws ClientNotFoundException, AccountBankNotFoundException, ValueUpper2000Exception, ValueUpperBalanceException, NegativeValuesException, ValueUpper1000Exception {
+        String idClient = "";
+        String idCuenta ="";
+        String depositQuantity = "";
+        AccountBank accountBankResult = null;
+        System.out.println("Digite id del dueno de la cuenta");
+        idClient = scanner.next();
+        System.out.println("Digite id de la cuenta");
+        idCuenta = scanner.next();
+        AccountBank accountBank = serviceBankAdmin.searchAccountOfClientGivenAccountId(idClient, idCuenta);
+        System.out.println("Digite la cantidad a retirar");
+        depositQuantity = scanner.next();
+        if(accountBank instanceof CurrentAccount){
+            accountBankResult = serviceBankAdmin.withdrawFromCurrentAccount(Double.valueOf(depositQuantity),(CurrentAccount)accountBank);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().remove(accountBank);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().add(accountBankResult);
+        }
+        if(accountBank instanceof SavingsAccount){
+            accountBankResult = serviceBankAdmin.withdrawFromSavingAccount(Double.valueOf(depositQuantity), (SavingsAccount)accountBank);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().remove(accountBank);
+            serviceBankAdmin.searchClient(idClient).getAccountsBank().add(accountBankResult);
+        }
+    }
 
     private static void deposit() throws ClientNotFoundException, AccountBankNotFoundException, NegativeValuesException {
         String idClient = "";
